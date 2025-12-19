@@ -863,10 +863,11 @@ ParquetReader::ParquetReader(ClientContext &context_p, ParquetOptions parquet_op
 ParquetReader::~ParquetReader() {
 }
 
-const FileMetaData *ParquetReader::GetFileMetadata() const {
+shared_ptr<const FileMetaData> ParquetReader::GetFileMetadata() const {
 	D_ASSERT(metadata);
 	D_ASSERT(metadata->metadata);
-	return metadata->metadata.get();
+	// aliasing shared_ptr keeps the owning cache entry alive even if the cache evicts the key
+	return shared_ptr<const FileMetaData>(metadata, metadata->metadata.get());
 }
 
 static unique_ptr<BaseStatistics> ReadStatisticsInternal(const FileMetaData &file_meta_data,

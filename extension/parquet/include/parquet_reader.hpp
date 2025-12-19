@@ -178,7 +178,8 @@ public:
 	idx_t NumRows() const;
 	idx_t NumRowGroups() const;
 
-	const duckdb_parquet::FileMetaData *GetFileMetadata() const;
+	//! Return the Parquet file metadata wrapped in a shared_ptr alias that keeps the underlying cache entry alive.
+	shared_ptr<const duckdb_parquet::FileMetaData> GetFileMetadata() const;
 	string static GetUniqueFileIdentifier(const duckdb_parquet::EncryptionAlgorithm &encryption_algorithm);
 
 	uint32_t Read(duckdb_apache::thrift::TBase &object, TProtocol &iprot);
